@@ -12,11 +12,9 @@ const nave = {
     y: canvas.height / 2,
     tamanho: 20
 };
-
-/********
- * Nave *
- ********/
-
+/******
+ *NAVE*
+ ******/
 function desenharNave() {
     ctx.beginPath();
 
@@ -29,14 +27,11 @@ function desenharNave() {
     ctx.fillStyle = "white";
     ctx.fill();
 }
-/***********
- * gameloop*
- ***********/
+
+desenharNave();
 
 function gameLoop() {
-    console.log("rodando");
+    desenharNave();
 
     requestAnimationFrame(gameLoop);
-}
-
-gameLoop();
+};
