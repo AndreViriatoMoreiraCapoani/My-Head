@@ -31,7 +31,12 @@ function desenharNave() {
 desenharNave();
 
 function gameLoop() {
+    nave.x += 1;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     desenharNave();
 
     requestAnimationFrame(gameLoop);
-};
+}
+
+gameLoop();
