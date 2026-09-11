@@ -10,8 +10,12 @@ ctx.fillRect(0, 0, canvas.width, canvas.height);
 const nave = {
     x: canvas.width / 2,
     y: canvas.height / 2,
-    tamanho: 20
+    tamanho: 20,
+    velocidade: 5
 };
+
+const tiros = [];
+
 /******
  *NAVE*
  ******/
@@ -30,12 +34,6 @@ function desenharNave() {
 
 desenharNave();
 
-function gameLoop() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    desenharNave();
-    requestAnimationFrame(gameLoop);
-}
-
 let teclas = {
     cima: false,
     baixo: false,
@@ -44,6 +42,14 @@ let teclas = {
 };
 
 document.addEventListener("keydown", function(event) {
+
+    if (event.key === " ") {
+    tiros.push({
+        x: nave.x + nave.tamanho,
+        y: nave.y,
+        velocidade: 10
+    });
+}
 
     if (event.key === "ArrowUp" || event.key === "w") {
         teclas.cima = true;
@@ -83,45 +89,61 @@ document.addEventListener("keyup", function(event) {
 
 });
 
-function gameLoop() {
 
+function gameLoop() {
     if (teclas.cima) {
-        nave.y -= 5;
+        nave.y -= nave.velocidade;
     }
 
     if (teclas.baixo) {
-        nave.y += 5;
+        nave.y += nave.velocidade;
     }
 
     if (teclas.esquerda) {
-        nave.x -= 5;
+        nave.x -= nave.velocidade;
     }
 
     if (teclas.direita) {
-        nave.x += 5;
+        nave.x += nave.velocidade;
     }
 
     if (nave.x < nave.tamanho) {
-    nave.x = nave.tamanho;
-}
+        nave.x = nave.tamanho;
+    }
 
-if (nave.x > canvas.width - nave.tamanho) {
-    nave.x = canvas.width - nave.tamanho;
-}
+    if (nave.x > canvas.width - nave.tamanho) {
+        nave.x = canvas.width - nave.tamanho;
+    }
 
-if (nave.y < nave.tamanho) {
-    nave.y = nave.tamanho;
-}
+    if (nave.y < nave.tamanho) {
+        nave.y = nave.tamanho;
+    }
 
-if (nave.y > canvas.height - nave.tamanho) {
-    nave.y = canvas.height - nave.tamanho;
-}
+    if (nave.y > canvas.height - nave.tamanho) {
+        nave.y = canvas.height - nave.tamanho;
+    }
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     desenharNave();
+    desenharTiros();
 
     requestAnimationFrame(gameLoop);
+}
+
+function desenharTiros() {
+    for (let i = tiros.length - 1; i >= 0; i--) {
+        const tiro = tiros[i];
+
+        tiro.x += tiro.velocidade;
+
+        ctx.fillStyle = "yellow";
+        ctx.fillRect(tiro.x, tiro.y - 2, 10, 4);
+
+        if (tiro.x > canvas.width) {
+            tiros.splice(i, 1);
+        }
+    }
 }
 
 gameLoop();
