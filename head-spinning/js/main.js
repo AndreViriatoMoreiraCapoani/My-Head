@@ -101,6 +101,22 @@ function gameLoop() {
         nave.x += 5;
     }
 
+    if (nave.x < nave.tamanho) {
+    nave.x = nave.tamanho;
+}
+
+if (nave.x > canvas.width - nave.tamanho) {
+    nave.x = canvas.width - nave.tamanho;
+}
+
+if (nave.y < nave.tamanho) {
+    nave.y = nave.tamanho;
+}
+
+if (nave.y > canvas.height - nave.tamanho) {
+    nave.y = canvas.height - nave.tamanho;
+}
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     desenharNave();
