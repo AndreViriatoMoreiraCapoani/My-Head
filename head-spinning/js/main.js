@@ -31,7 +31,76 @@ function desenharNave() {
 desenharNave();
 
 function gameLoop() {
-    nave.x += 1;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    desenharNave();
+    requestAnimationFrame(gameLoop);
+}
+
+let teclas = {
+    cima: false,
+    baixo: false,
+    esquerda: false,
+    direita: false
+};
+
+document.addEventListener("keydown", function(event) {
+
+    if (event.key === "ArrowUp" || event.key === "w") {
+        teclas.cima = true;
+    }
+
+    if (event.key === "ArrowDown" || event.key === "s") {
+        teclas.baixo = true;
+    }
+
+    if (event.key === "ArrowLeft" || event.key === "a") {
+        teclas.esquerda = true;
+    }
+
+    if (event.key === "ArrowRight" || event.key === "d") {
+        teclas.direita = true;
+    }
+
+});
+
+document.addEventListener("keyup", function(event) {
+
+    if (event.key === "ArrowUp" || event.key === "w") {
+        teclas.cima = false;
+    }
+
+    if (event.key === "ArrowDown" || event.key === "s") {
+        teclas.baixo = false;
+    }
+
+    if (event.key === "ArrowLeft" || event.key === "a") {
+        teclas.esquerda = false;
+    }
+
+    if (event.key === "ArrowRight" || event.key === "d") {
+        teclas.direita = false;
+    }
+
+});
+
+function gameLoop() {
+
+    if (teclas.cima) {
+        nave.y -= 5;
+    }
+
+    if (teclas.baixo) {
+        nave.y += 5;
+    }
+
+    if (teclas.esquerda) {
+        nave.x -= 5;
+    }
+
+    if (teclas.direita) {
+        nave.x += 5;
+    }
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     desenharNave();
