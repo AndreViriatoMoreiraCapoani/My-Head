@@ -32,7 +32,12 @@ const tiros = [];
 *INIMIGOS*
 **********/
 
+/**********
+*INIMIGOS*
+**********/
+
 const inimigos = [];
+const tirosInimigos = [];
 
 function criarInimigo() {
     inimigos.push({
@@ -43,6 +48,18 @@ function criarInimigo() {
     });
 }
 
+function inimigoAtira() {
+    if (inimigos.length === 0) return;
+
+    const indice = Math.floor(Math.random() * inimigos.length);
+    const inimigo = inimigos[indice];
+
+    tirosInimigos.push({
+        x: inimigo.x - inimigo.tamanho,
+        y: inimigo.y,
+        velocidade: 6
+    });
+}
 
 /***************
  *DESENHAR NAVE*
