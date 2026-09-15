@@ -280,6 +280,13 @@ function desenharTirosInimigos() {
 
 function gameLoop() {
 
+    if (nave.vida <= 0) {
+        ctx.fillStyle = "white";
+        ctx.font = "48px sans-serif";
+        ctx.fillText("GAME OVER", canvas.width / 2 - 130, canvas.height / 2);
+        return;
+    }
+
     // Movimento da nave
 
     if (teclas.cima) {
@@ -297,7 +304,6 @@ function gameLoop() {
     if (teclas.direita) {
         nave.x += nave.velocidade;
     }
-
 
     // Limites da tela
 
@@ -317,19 +323,21 @@ function gameLoop() {
         nave.y = canvas.height - nave.tamanho;
     }
 
-
     // Limpa a tela
 
-    ctx.clearRect(
-        0,
-        0,
-        canvas.width,
-        canvas.height
-    );
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     desenharNave();
     desenharTiros();
     desenharInimigos();
+    desenharTirosInimigos();
+
+    // HUD
+
+    ctx.fillStyle = "white";
+    ctx.font = "20px sans-serif";
+    ctx.fillText("Vida: " + nave.vida, 20, 30);
+    ctx.fillText("Pontos: " + pontuacao, 20, 55);
 
     requestAnimationFrame(gameLoop);
 }
