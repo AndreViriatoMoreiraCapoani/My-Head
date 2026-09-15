@@ -61,6 +61,15 @@ function inimigoAtira() {
     });
 }
 
+/********
+*COLISÃO*
+********/
+
+function colide(obj1, tam1, obj2, tam2) {
+    return Math.abs(obj1.x - obj2.x) < (tam1 + tam2) &&
+           Math.abs(obj1.y - obj2.y) < (tam1 + tam2);
+}
+
 /***************
  *DESENHAR NAVE*
  ***************/
