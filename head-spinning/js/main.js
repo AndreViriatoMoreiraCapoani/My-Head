@@ -20,7 +20,7 @@ const nave = {
 };
 
 let pontuacao = 0;
-let jogoacabou = false;
+let estadoJogo = "start";
 
 /******
 *TIROS*
@@ -281,8 +281,14 @@ function desenharTirosInimigos() {
 
 function gameLoop() {
 
+    if (estadoJogo === "start") {
+        desenharTelaStart();
+        requestAnimationFrame(gameLoop);
+        return;
+    }
+
     if (nave.vida <= 0) {
-        jogoAcabou = true;
+        estadoJogo = "gameover";
         desenharTelaGameOver();
         return;
     }
@@ -380,7 +386,7 @@ function reiniciarJogo() {
     nave.vida = 3;
 
     pontuacao = 0;
-    jogoAcabou = false;
+    estadoJogo = "jogando";
 
     tiros.length = 0;
     inimigos.length = 0;
@@ -390,7 +396,7 @@ function reiniciarJogo() {
 }
 
 canvas.addEventListener("click", function(event) {
-    if (!jogoAcabou) return;
+    if (estadoJogo !== "gameover") return;
 
     const dentroX = event.clientX >= botaoReiniciar.x && event.clientX <= botaoReiniciar.x + botaoReiniciar.largura;
     const dentroY = event.clientY >= botaoReiniciar.y && event.clientY <= botaoReiniciar.y + botaoReiniciar.altura;
