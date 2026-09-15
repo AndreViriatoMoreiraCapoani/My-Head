@@ -264,13 +264,23 @@ function desenharInimigos() {
         const inimigo = inimigos[i];
         inimigo.x -= inimigo.velocidade;
 
-        ctx.fillStyle = "red";
-        ctx.fillRect(
-            inimigo.x - inimigo.tamanho,
-            inimigo.y - inimigo.tamanho,
-            inimigo.tamanho * 2,
-            inimigo.tamanho * 2
-        );
+        if (konamiAtivado && imgInimigoSkin.complete) {
+            ctx.drawImage(
+                imgInimigoSkin,
+                inimigo.x - inimigo.tamanho,
+                inimigo.y - inimigo.tamanho,
+                inimigo.tamanho * 2,
+                inimigo.tamanho * 2
+            );
+        } else {
+            ctx.fillStyle = "red";
+            ctx.fillRect(
+                inimigo.x - inimigo.tamanho,
+                inimigo.y - inimigo.tamanho,
+                inimigo.tamanho * 2,
+                inimigo.tamanho * 2
+            );
+        }
 
         if (colide(nave, nave.tamanho, inimigo, inimigo.tamanho)) {
             nave.vida--;
