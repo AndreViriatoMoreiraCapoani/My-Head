@@ -20,7 +20,13 @@ const nave = {
 };
 
 let pontuacao = 0;
+
+/****************
+*ESTADO DO JOGO*
+****************/
+
 let estadoJogo = "start";
+let konamiAtivado = false;
 
 /******
 *TIROS*
@@ -59,6 +65,7 @@ function inimigoAtira() {
         velocidade: 6
     });
 }
+
 
 /********
 *COLISÃO*
