@@ -250,6 +250,30 @@ function desenharInimigos() {
     }
 }
 
+/**************************
+*DESENHAR TIROS INIMIGOS*
+**************************/
+
+function desenharTirosInimigos() {
+    for (let i = tirosInimigos.length - 1; i >= 0; i--) {
+        const tiro = tirosInimigos[i];
+        tiro.x -= tiro.velocidade;
+
+        ctx.fillStyle = "orange";
+        ctx.fillRect(tiro.x, tiro.y - 2, 10, 4);
+
+        if (colide(nave, nave.tamanho, tiro, 5)) {
+            nave.vida--;
+            tirosInimigos.splice(i, 1);
+            continue;
+        }
+
+        if (tiro.x < 0) {
+            tirosInimigos.splice(i, 1);
+        }
+    }
+}
+
 /**********
 *GAME LOOP*
 **********/
