@@ -36,6 +36,8 @@ const inimigos = [];
 const tirosInimigos = [];
 
 function criarInimigo() {
+    if (estadoJogo !== "jogando") return;
+
     inimigos.push({
         x: canvas.width,
         y: Math.random() * canvas.height,
@@ -45,6 +47,7 @@ function criarInimigo() {
 }
 
 function inimigoAtira() {
+    if (estadoJogo !== "jogando") return;
     if (inimigos.length === 0) return;
 
     const indice = Math.floor(Math.random() * inimigos.length);
@@ -94,6 +97,36 @@ function desenharNave() {
     ctx.fill();
 }
 
+/**************
+*TELA DE START*
+**************/
+
+function desenharTelaStart() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    desenharNave();
+
+    ctx.textAlign = "center";
+
+    ctx.fillStyle = "red";
+    ctx.font = "bold 64px sans-serif";
+    ctx.fillText("ARCADE SPACE", canvas.width / 2, canvas.height / 2 - 120);
+
+    ctx.fillStyle = "white";
+    ctx.font = "20px sans-serif";
+    ctx.fillText("Pressione ESPAÇO para começar", canvas.width / 2, canvas.height / 2 + 80);
+
+    if (konamiAtivado) {
+        ctx.fillStyle = "yellow";
+        ctx.font = "18px sans-serif";
+        ctx.fillText("CRÉDITOS: Rafael — código Konami ativado! Skin de inimigo desbloqueada.", canvas.width / 2, canvas.height / 2 + 120);
+    }
+
+    ctx.textAlign = "start";
+}
 
 /**********
 *CONTROLES*
@@ -188,34 +221,6 @@ function desenharTiros() {
         }
     }
 }
-
-/******************
-*DESENHAR INIMIGOS*
-******************/
-
-function desenharInimigos() {
-
-    for (let i = inimigos.length - 1; i >= 0; i--) {
-
-        const inimigo = inimigos[i];
-
-        inimigo.x -= inimigo.velocidade;
-
-        ctx.fillStyle = "red";
-
-        ctx.fillRect(
-            inimigo.x - inimigo.tamanho,
-            inimigo.y - inimigo.tamanho,
-            inimigo.tamanho * 2,
-            inimigo.tamanho * 2
-        );
-
-        if (inimigo.x < 0) {
-            inimigos.splice(i, 1);
-        }
-    }
-}
-
 
 /******************
 *DESENHAR INIMIGOS*
