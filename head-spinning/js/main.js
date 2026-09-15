@@ -347,4 +347,6 @@ function gameLoop() {
 *************/
 
 setInterval(criarInimigo, 1000);
+setInterval(inimigoAtira, 1500);
+
 gameLoop();
