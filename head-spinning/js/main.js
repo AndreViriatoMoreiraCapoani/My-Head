@@ -21,18 +21,21 @@ const nave = {
 
 let pontuacao = 0;
 
+
 /****************
 *ESTADO DO JOGO*
 ****************/
 
-let estadoJogo = "start";
+let estadoJogo = "start"; // "start", "jogando" ou "gameover"
 let konamiAtivado = false;
+
 
 /******
 *TIROS*
 ******/
 
 const tiros = [];
+
 
 /**********
 *INIMIGOS*
@@ -66,12 +69,14 @@ function inimigoAtira() {
     });
 }
 
+
 /*******************
 *SKIN DOS INIMIGOS*
 *******************/
 
 const imgInimigoSkin = new Image();
 imgInimigoSkin.src = "head-gif.gif";
+
 
 /********
 *COLISÃO*
@@ -81,6 +86,7 @@ function colide(obj1, tam1, obj2, tam2) {
     return Math.abs(obj1.x - obj2.x) < (tam1 + tam2) &&
            Math.abs(obj1.y - obj2.y) < (tam1 + tam2);
 }
+
 
 /*************
 *KONAMI CODE*
@@ -101,6 +107,7 @@ function verificarKonami(tecla) {
         bufferKonami = [];
     }
 }
+
 
 /***************
  *DESENHAR NAVE*
@@ -129,6 +136,7 @@ function desenharNave() {
     ctx.fillStyle = "white";
     ctx.fill();
 }
+
 
 /**************
 *TELA DE START*
@@ -161,11 +169,23 @@ function desenharTelaStart() {
     ctx.textAlign = "start";
 }
 
+
+/**********
+*CONTROLES*
+***********/
+
+let teclas = {
+    cima: false,
+    baixo: false,
+    esquerda: false,
+    direita: false
+};
+
 document.addEventListener("keydown", function(event) {
 
     verificarKonami(event.key);
 
-    // Espaço: inicia o jogo ou atira
+    // Espaço: inicia o jogo OU atira
 
     if (event.key === " ") {
         if (estadoJogo === "start") {
@@ -198,6 +218,7 @@ document.addEventListener("keydown", function(event) {
     }
 });
 
+
 document.addEventListener("keyup", function(event) {
 
     if (event.key === "ArrowUp" || event.key === "w") {
@@ -218,18 +239,26 @@ document.addEventListener("keyup", function(event) {
 });
 
 
-
 /***************
 *DESENHAR TIROS*
 ***************/
 
 function desenharTiros() {
+
     for (let i = tiros.length - 1; i >= 0; i--) {
+
         const tiro = tiros[i];
+
         tiro.x += tiro.velocidade;
 
         ctx.fillStyle = "yellow";
-        ctx.fillRect(tiro.x, tiro.y - 2, 10, 4);
+
+        ctx.fillRect(
+            tiro.x,
+            tiro.y - 2,
+            10,
+            4
+        );
 
         let acertou = false;
 
@@ -249,13 +278,17 @@ function desenharTiros() {
     }
 }
 
+
 /******************
 *DESENHAR INIMIGOS*
 ******************/
 
 function desenharInimigos() {
+
     for (let i = inimigos.length - 1; i >= 0; i--) {
+
         const inimigo = inimigos[i];
+
         inimigo.x -= inimigo.velocidade;
 
         if (konamiAtivado && imgInimigoSkin.complete) {
@@ -288,6 +321,7 @@ function desenharInimigos() {
     }
 }
 
+
 /**************************
 *DESENHAR TIROS INIMIGOS*
 **************************/
@@ -311,6 +345,7 @@ function desenharTirosInimigos() {
         }
     }
 }
+
 
 /**********
 *GAME LOOP*
@@ -348,6 +383,7 @@ function gameLoop() {
         nave.x += nave.velocidade;
     }
 
+
     // Limites da tela
 
     if (nave.x < nave.tamanho) {
@@ -366,9 +402,15 @@ function gameLoop() {
         nave.y = canvas.height - nave.tamanho;
     }
 
+
     // Limpa a tela
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
 
     desenharNave();
     desenharTiros();
@@ -384,6 +426,7 @@ function gameLoop() {
 
     requestAnimationFrame(gameLoop);
 }
+
 
 /*********
 *GAME OVER*
@@ -442,6 +485,7 @@ canvas.addEventListener("click", function(event) {
         reiniciarJogo();
     }
 });
+
 
 /*************
 *INICIAR JOGO*
