@@ -7,24 +7,64 @@ canvas.height = window.innerHeight;
 ctx.fillStyle = "black";
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+/*****
+*NAVE*
+*****/
+
 const nave = {
     x: canvas.width / 2,
     y: canvas.height / 2,
     tamanho: 20,
-    velocidade: 5
+    velocidade: 5,
+    vida: 3
 };
+
+let pontuacao = 0;
+
+/******
+*TIROS*
+******/
 
 const tiros = [];
 
-/******
- *NAVE*
- ******/
+
+/**********
+*INIMIGOS*
+**********/
+
+const inimigos = [];
+
+function criarInimigo() {
+    inimigos.push({
+        x: canvas.width,
+        y: Math.random() * canvas.height,
+        tamanho: 20,
+        velocidade: 3
+    });
+}
+
+
+/***************
+ *DESENHAR NAVE*
+ ***************/
+
 function desenharNave() {
     ctx.beginPath();
 
-    ctx.moveTo(nave.x + nave.tamanho, nave.y);
-    ctx.lineTo(nave.x - nave.tamanho, nave.y - nave.tamanho / 2);
-    ctx.lineTo(nave.x - nave.tamanho, nave.y + nave.tamanho / 2);
+    ctx.moveTo(
+        nave.x + nave.tamanho,
+        nave.y
+    );
+
+    ctx.lineTo(
+        nave.x - nave.tamanho,
+        nave.y - nave.tamanho / 2
+    );
+
+    ctx.lineTo(
+        nave.x - nave.tamanho,
+        nave.y + nave.tamanho / 2
+    );
 
     ctx.closePath();
 
@@ -32,7 +72,10 @@ function desenharNave() {
     ctx.fill();
 }
 
-desenharNave();
+
+/**********
+*CONTROLES*
+***********/
 
 let teclas = {
     cima: false,
@@ -43,13 +86,17 @@ let teclas = {
 
 document.addEventListener("keydown", function(event) {
 
+    // Atirar
+
     if (event.key === " ") {
-    tiros.push({
-        x: nave.x + nave.tamanho,
-        y: nave.y,
-        velocidade: 10
-    });
-}
+        tiros.push({
+            x: nave.x + nave.tamanho,
+            y: nave.y,
+            velocidade: 10
+        });
+    }
+
+    // Movimento
 
     if (event.key === "ArrowUp" || event.key === "w") {
         teclas.cima = true;
@@ -66,8 +113,8 @@ document.addEventListener("keydown", function(event) {
     if (event.key === "ArrowRight" || event.key === "d") {
         teclas.direita = true;
     }
-
 });
+
 
 document.addEventListener("keyup", function(event) {
 
@@ -86,11 +133,73 @@ document.addEventListener("keyup", function(event) {
     if (event.key === "ArrowRight" || event.key === "d") {
         teclas.direita = false;
     }
-
 });
 
 
+/***************
+*DESENHAR TIROS*
+***************/
+
+function desenharTiros() {
+
+    for (let i = tiros.length - 1; i >= 0; i--) {
+
+        const tiro = tiros[i];
+
+        tiro.x += tiro.velocidade;
+
+        ctx.fillStyle = "yellow";
+
+        ctx.fillRect(
+            tiro.x,
+            tiro.y - 2,
+            10,
+            4
+        );
+
+        if (tiro.x > canvas.width) {
+            tiros.splice(i, 1);
+        }
+    }
+}
+
+
+/******************
+*DESENHAR INIMIGOS*
+******************/
+
+function desenharInimigos() {
+
+    for (let i = inimigos.length - 1; i >= 0; i--) {
+
+        const inimigo = inimigos[i];
+
+        inimigo.x -= inimigo.velocidade;
+
+        ctx.fillStyle = "red";
+
+        ctx.fillRect(
+            inimigo.x - inimigo.tamanho,
+            inimigo.y - inimigo.tamanho,
+            inimigo.tamanho * 2,
+            inimigo.tamanho * 2
+        );
+
+        if (inimigo.x < 0) {
+            inimigos.splice(i, 1);
+        }
+    }
+}
+
+
+/**********
+*GAME LOOP*
+**********/
+
 function gameLoop() {
+
+    // Movimento da nave
+
     if (teclas.cima) {
         nave.y -= nave.velocidade;
     }
@@ -106,6 +215,9 @@ function gameLoop() {
     if (teclas.direita) {
         nave.x += nave.velocidade;
     }
+
+
+    // Limites da tela
 
     if (nave.x < nave.tamanho) {
         nave.x = nave.tamanho;
@@ -123,27 +235,26 @@ function gameLoop() {
         nave.y = canvas.height - nave.tamanho;
     }
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Limpa a tela
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
 
     desenharNave();
     desenharTiros();
+    desenharInimigos();
 
     requestAnimationFrame(gameLoop);
 }
 
-function desenharTiros() {
-    for (let i = tiros.length - 1; i >= 0; i--) {
-        const tiro = tiros[i];
+/*************
+*INICIAR JOGO*
+*************/
 
-        tiro.x += tiro.velocidade;
-
-        ctx.fillStyle = "yellow";
-        ctx.fillRect(tiro.x, tiro.y - 2, 10, 4);
-
-        if (tiro.x > canvas.width) {
-            tiros.splice(i, 1);
-        }
-    }
-}
-
+setInterval(criarInimigo, 1000);
 gameLoop();
