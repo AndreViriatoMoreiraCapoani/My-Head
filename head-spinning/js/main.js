@@ -162,33 +162,36 @@ document.addEventListener("keyup", function(event) {
 });
 
 
+
 /***************
 *DESENHAR TIROS*
 ***************/
 
 function desenharTiros() {
-
     for (let i = tiros.length - 1; i >= 0; i--) {
-
         const tiro = tiros[i];
-
         tiro.x += tiro.velocidade;
 
         ctx.fillStyle = "yellow";
+        ctx.fillRect(tiro.x, tiro.y - 2, 10, 4);
 
-        ctx.fillRect(
-            tiro.x,
-            tiro.y - 2,
-            10,
-            4
-        );
+        let acertou = false;
 
-        if (tiro.x > canvas.width) {
+        for (let j = inimigos.length - 1; j >= 0; j--) {
+            const inimigo = inimigos[j];
+            if (colide(tiro, 5, inimigo, inimigo.tamanho)) {
+                inimigos.splice(j, 1);
+                pontuacao += 10;
+                acertou = true;
+                break;
+            }
+        }
+
+        if (acertou || tiro.x > canvas.width) {
             tiros.splice(i, 1);
         }
     }
 }
-
 
 /******************
 *DESENHAR INIMIGOS*
@@ -217,6 +220,35 @@ function desenharInimigos() {
     }
 }
 
+
+/******************
+*DESENHAR INIMIGOS*
+******************/
+
+function desenharInimigos() {
+    for (let i = inimigos.length - 1; i >= 0; i--) {
+        const inimigo = inimigos[i];
+        inimigo.x -= inimigo.velocidade;
+
+        ctx.fillStyle = "red";
+        ctx.fillRect(
+            inimigo.x - inimigo.tamanho,
+            inimigo.y - inimigo.tamanho,
+            inimigo.tamanho * 2,
+            inimigo.tamanho * 2
+        );
+
+        if (colide(nave, nave.tamanho, inimigo, inimigo.tamanho)) {
+            nave.vida--;
+            inimigos.splice(i, 1);
+            continue;
+        }
+
+        if (inimigo.x < 0) {
+            inimigos.splice(i, 1);
+        }
+    }
+}
 
 /**********
 *GAME LOOP*
