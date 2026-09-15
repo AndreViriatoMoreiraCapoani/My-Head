@@ -20,17 +20,13 @@ const nave = {
 };
 
 let pontuacao = 0;
+let jogoacabou = false;
 
 /******
 *TIROS*
 ******/
 
 const tiros = [];
-
-
-/**********
-*INIMIGOS*
-**********/
 
 /**********
 *INIMIGOS*
@@ -281,9 +277,8 @@ function desenharTirosInimigos() {
 function gameLoop() {
 
     if (nave.vida <= 0) {
-        ctx.fillStyle = "white";
-        ctx.font = "48px sans-serif";
-        ctx.fillText("GAME OVER", canvas.width / 2 - 130, canvas.height / 2);
+        jogoAcabou = true;
+        desenharTelaGameOver();
         return;
     }
 
@@ -341,6 +336,64 @@ function gameLoop() {
 
     requestAnimationFrame(gameLoop);
 }
+
+/*********
+*GAME OVER*
+*********/
+
+const botaoReiniciar = {
+    x: canvas.width / 2 - 100,
+    y: canvas.height / 2 + 40,
+    largura: 200,
+    altura: 50
+};
+
+function desenharTelaGameOver() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "white";
+    ctx.font = "48px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("GAME OVER", canvas.width / 2, canvas.height / 2 - 60);
+
+    ctx.font = "24px sans-serif";
+    ctx.fillText("Pontuação final: " + pontuacao, canvas.width / 2, canvas.height / 2 - 10);
+
+    ctx.fillStyle = "#4CAF50";
+    ctx.fillRect(botaoReiniciar.x, botaoReiniciar.y, botaoReiniciar.largura, botaoReiniciar.altura);
+
+    ctx.fillStyle = "white";
+    ctx.font = "22px sans-serif";
+    ctx.fillText("REINICIAR", canvas.width / 2, botaoReiniciar.y + 32);
+
+    ctx.textAlign = "start";
+}
+
+function reiniciarJogo() {
+    nave.x = canvas.width / 2;
+    nave.y = canvas.height / 2;
+    nave.vida = 3;
+
+    pontuacao = 0;
+    jogoAcabou = false;
+
+    tiros.length = 0;
+    inimigos.length = 0;
+    tirosInimigos.length = 0;
+
+    gameLoop();
+}
+
+canvas.addEventListener("click", function(event) {
+    if (!jogoAcabou) return;
+
+    const dentroX = event.clientX >= botaoReiniciar.x && event.clientX <= botaoReiniciar.x + botaoReiniciar.largura;
+    const dentroY = event.clientY >= botaoReiniciar.y && event.clientY <= botaoReiniciar.y + botaoReiniciar.altura;
+
+    if (dentroX && dentroY) {
+        reiniciarJogo();
+    }
+});
 
 /*************
 *INICIAR JOGO*
