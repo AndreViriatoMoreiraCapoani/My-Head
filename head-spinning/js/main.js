@@ -161,27 +161,22 @@ function desenharTelaStart() {
     ctx.textAlign = "start";
 }
 
-/**********
-*CONTROLES*
-***********/
-
-let teclas = {
-    cima: false,
-    baixo: false,
-    esquerda: false,
-    direita: false
-};
-
 document.addEventListener("keydown", function(event) {
 
-    // Atirar
+    verificarKonami(event.key);
+
+    // Espaço: inicia o jogo ou atira
 
     if (event.key === " ") {
-        tiros.push({
-            x: nave.x + nave.tamanho,
-            y: nave.y,
-            velocidade: 10
-        });
+        if (estadoJogo === "start") {
+            estadoJogo = "jogando";
+        } else if (estadoJogo === "jogando") {
+            tiros.push({
+                x: nave.x + nave.tamanho,
+                y: nave.y,
+                velocidade: 10
+            });
+        }
     }
 
     // Movimento
@@ -202,7 +197,6 @@ document.addEventListener("keydown", function(event) {
         teclas.direita = true;
     }
 });
-
 
 document.addEventListener("keyup", function(event) {
 
